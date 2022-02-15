@@ -80,6 +80,7 @@ void input(){
 }
 
 void solve(){
+    //Chien thuat: Lua chon nhung la bai co gia tri >50 de dam bao xac suat >50% nhan duoc la bai lon hon.
 	if(x>=50){
         cout << "Pick this card.";
     }
