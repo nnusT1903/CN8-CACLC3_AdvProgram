@@ -1,0 +1,6 @@
+﻿  01_hello_SDL.cpp
+  Generating code
+  Compiler switch has changed, fall back to full compilation.
+  All 88 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  TestSDL.vcxproj -> F:\W_Envi\Programming\C++\UET\SDL\TestSDL\TestSDL\x64\Release\TestSDL.exe

@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    },
+    "06770424-ac31-4993-98c3-c7362322fd50": {
+      "ProjectGuid": "06770424-ac31-4993-98c3-c7362322fd50",
+      "DisplayName": "TestSDL",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
