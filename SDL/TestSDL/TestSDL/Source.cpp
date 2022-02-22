@@ -70,10 +70,13 @@ int main(int argc, char* argv[]) {
 	bool quit = false;
 	SDL_Event event;
 	while (!quit) {
+		int cnt;
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_KEYDOWN) {
-				close();
-				quit = true;
+			switch (event.key.keysym.sym) {
+				case SDLK_w: {
+					close();
+					quit = true;
+				}
 			}
 		}
 	}
