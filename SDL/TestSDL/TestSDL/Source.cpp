@@ -2,8 +2,8 @@
 #include<SDL.h>
 using namespace std;
 
-#define SCREEN_WIDTH	1280
-#define SCREEN_HEIGHT	720
+#define SCREEN_WIDTH	1920
+#define SCREEN_HEIGHT	1080
 
 //declaration here:
 SDL_Window* window = NULL;
@@ -66,6 +66,17 @@ int main(int argc, char* argv[]) {
 //			SDL_Delay(3000);
 		}
 	}
+	SDL_Rect frame; //lower right
+	frame.x = -1470;
+	frame.y = -190;
+	frame.w = 1920;
+	frame.h = 1080;
+
+	SDL_Rect frame2; //center
+	frame2.x = -735;
+	frame2.y = -95;
+	frame2.w = 1920;
+	frame2.h = 1080;
 
 	bool quit = false;
 	SDL_Event event;
@@ -76,6 +87,12 @@ int main(int argc, char* argv[]) {
 				case SDLK_w: {
 					close();
 					quit = true;
+				}
+				case SDLK_d: {
+//					SDL_FillRect(mainSurface, NULL, 0x000000); //clear old drawings
+					SDL_BlitSurface(surface, &frame, mainSurface, NULL);
+					SDL_BlitSurface(surface, &frame2, mainSurface, NULL);
+					SDL_UpdateWindowSurface(window);
 				}
 			}
 		}
