@@ -46,7 +46,7 @@ typedef long double ld;
 */
 
 //declaration here:
-vector<ld> v;
+deque<int> dq;
 
 void F_Color(string s){
     #define reset   "\033[0m"
@@ -74,14 +74,37 @@ void IOS(){
 //	system("Color F1");
 }
 
+int bs(int low, int high, int id){
+	while(low<=high){
+		int mid = (low+high)/2;
+		if(id == dq[mid]){
+			return ++mid;
+		}
+		else if(id > dq[mid]){
+			low = ++mid;
+		}
+		else high = --mid;
+	}
+	return low;
+}
+
 void input(){
-    for(int i=0;i<5;i++){
-        ld x;
-        cin >> x;
-        v.pb(x);
-    }
-    sort(all(v));
-    cout << v[2];
+	for(int i=0;i<5;i++){
+		cin >> dq[i];
+	}
+	for(int i = 1; i < 5; i++){
+		int j = i-1;
+		int temp = dq[i];
+		
+		int idx = bs(0,j,dq[i]);
+
+		while(j>=idx){
+			dq[j+1]=dq[j];
+			j--;
+		}
+		dq[j+1] = temp;
+	}
+	cout << dq[2];
 	return;
 }
 
