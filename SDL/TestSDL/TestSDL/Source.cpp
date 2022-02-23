@@ -4,15 +4,31 @@ using namespace std;
 
 #define SCREEN_WIDTH	1920
 #define SCREEN_HEIGHT	1080
+#define N				NULL
+#define maxn			100005
 
 //declaration here:
-SDL_Window* window = NULL;
-SDL_Surface* mainSurface = NULL;
-SDL_Surface* surface = NULL;
+enum KeyPressed {
+	Key_Pressed_Surface_default,
+	Key_Pressed_Surface_up,
+	Key_Pressed_Surface_down,
+	Key_Pressed_Surface_left,
+	Key_Pressed_Surface_right,
+	Key_Pressed_Surface_total
+};
+SDL_Window* window = N;
+SDL_Surface* mainSurface = N;
+SDL_Surface* surface = N;
+SDL_Surface* KeySurfaces[Key_Pressed_Surface_total];
+SDL_Surface* currentSurface = N;
+
+//declaration p2:
+string path[32];
 
 bool init() {
 	bool success = true;
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+
+	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		cout << "SDL could not initialize!" << endl;
 		cout << SDL_GetError();
 		success = false;
@@ -32,13 +48,38 @@ bool init() {
 	return success;
 }
 
+SDL_Surface* loadSurface(char* path) {
+	SDL_Surface* tempSurface = NULL;
+	tempSurface = SDL_LoadBMP(path);
+	if (tempSurface == NULL) {
+		cout << "Picture could not be loaded." << endl;
+		cout << SDL_GetError();
+	}
+	return tempSurface;
+}
+
+
 bool Load() {
 	bool success = true;
-	surface = SDL_LoadBMP("C:/Users/Admin/Downloads/ditmendc1.bmp");
-	if (surface == NULL) {
-		success = false;
-		cout << "Window could not be created" << endl;
-		cout << SDL_GetError();
+	string path[5] = {	"C:/Users/Admin/Downloads/ditmendc1.bmp",
+						"C:/Users/Admin/Downloads/vailonSDL.bmp",
+						"C:/Users/Admin/Downloads/flolontilo.bmp",
+						"C:/Users/Admin/Downloads/flolontilo.bmp", 
+						"C:/Users/Admin/Downloads/vailonSDL.bmp"};
+
+
+	for (int i = 0; i < 5; i++) {
+		const int sz = path[i].length();
+		char temp[101];
+		strcpy_s(temp, path[i].c_str());
+
+		
+		KeySurfaces[i] = loadSurface(temp);
+		if (KeySurfaces[i] == NULL) {
+			cout << "Failed to load up image." << endl;
+			success = false;
+			break;
+		}
 	}
 	return success;
 }
@@ -53,51 +94,56 @@ void close() {
 
 
 int main(int argc, char* argv[]) {
-	if (!init()) {
-		cout << "Failed to initialize.";
-	}
-	else {
-		if (!Load()) {
-			cout << "Failed to load media file.";
-		}
-		else {
-			SDL_BlitSurface(surface, NULL, mainSurface, NULL);
-			SDL_UpdateWindowSurface(window);
-//			SDL_Delay(3000);
-		}
-	}
-	SDL_Rect frame; //lower right
-	frame.x = -1470;
-	frame.y = -190;
-	frame.w = 1920;
-	frame.h = 1080;
-
-	SDL_Rect frame2; //center
-	frame2.x = -735;
-	frame2.y = -95;
-	frame2.w = 1920;
-	frame2.h = 1080;
-
 	bool quit = false;
 	SDL_Event event;
+	currentSurface = KeySurfaces[Key_Pressed_Surface_default];
+	if (!init()) {
+		cout << "Failed to initialize.";
+		close();
+		return 0;
+	}
+
+	if (!Load()) {
+		cout << "Failed to load media file.";
+		close();
+		return 0;
+	}
 	while (!quit) {
-		int cnt;
 		while (SDL_PollEvent(&event)) {
-			switch (event.key.keysym.sym) {
-				case SDLK_w: {
-					close();
+			if (event.type == SDL_QUIT) {
+				quit = true;
+			}
+			else if (event.type == SDL_KEYDOWN) {
+				switch (event.key.keysym.sym) {
+				case SDLK_x:
 					quit = true;
-				}
-				case SDLK_d: {
-//					SDL_FillRect(mainSurface, NULL, 0x000000); //clear old drawings
-					SDL_BlitSurface(surface, &frame, mainSurface, NULL);
-					SDL_BlitSurface(surface, &frame2, mainSurface, NULL);
-					SDL_UpdateWindowSurface(window);
+
+				case SDLK_UP:
+					currentSurface = KeySurfaces[Key_Pressed_Surface_up];
+					break;
+
+				case SDLK_DOWN:
+					currentSurface = KeySurfaces[Key_Pressed_Surface_down];
+					break;
+
+				case SDLK_LEFT:
+					currentSurface = KeySurfaces[Key_Pressed_Surface_left];
+					break;
+
+				case SDLK_RIGHT:
+					currentSurface = KeySurfaces[Key_Pressed_Surface_right];
+					break;
+
+				case SDLK_w:
+					currentSurface = KeySurfaces[Key_Pressed_Surface_default];
 				}
 			}
+			SDL_FillRect(mainSurface, N, 0x000000);
+			SDL_BlitSurface(currentSurface, NULL, mainSurface, NULL);
+			SDL_UpdateWindowSurface(window);
 		}
 	}
-	
+	close();
 
 	return 0;
 }
