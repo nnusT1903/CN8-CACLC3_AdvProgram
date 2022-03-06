@@ -1,7 +1,7 @@
 /**
  * @file    16.cpp
  * @author  TsunN
- * @brief   Naive Attempt for "Tandem Repeats" without using Hash or Suffix Tree
+ * @brief   Naive Attempt for "Tandem Repeats" without using Hash or Suffix Tree (50/100)
  * @version 0.1
  * @date    2022-03-06
  * 
