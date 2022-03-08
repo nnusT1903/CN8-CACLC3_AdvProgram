@@ -45,7 +45,7 @@ void init(int m, int n, int k){
     srand(time(NULL));
     memset(a, '.', sizeof(a));
     memset(masked, 1, sizeof(masked));
-    for(int i=0;i<k;i++){
+    while(k--){
         int x = rand() % m;
         int y = rand() % n;
         a[x][y] = '*';
@@ -89,7 +89,7 @@ bool valid(int x, int y, int m, int n){
 }
 
 /**
- * @brief Check if input coordinates have a mine
+ * @brief Check if input coordinates have a mine.
  * @param x     coordinate 
  * @param y     coordinate
  * @return true     if given coordinates has a mine
@@ -102,6 +102,11 @@ bool checkMine(int x, int y){
     return false;
 }
 
+/**
+ * @brief Print the current state of mine field.
+ * @param m rows
+ * @param n columns
+ */
 void printCurrent(int m, int n){
     for(int i=0;i<m;i++){
         for(int j=0;j<n;j++){
@@ -117,22 +122,67 @@ void printCurrent(int m, int n){
 }
 
 /**
+ * @brief Check if the whole mine field is cleared.
+ * @param   m       rows
+ * @param   n       columns
+ * @return true     if it's cleared
+ * @return false    otherwise
+ */
+bool clear(int m, int n){
+    int cnt =0;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(masked[i][j]){
+                cnt++;
+            }
+        }
+    }
+    if(cnt!=k){
+        return false;
+    }
+    return true;
+}
+
+/**
+ * @brief Reveal all surrounding pos when the chosen pos has value of 0
+ * @param x coordinate
+ * @param y coordinate
+ */
+void unmasked(int x, int y){
+    masked[x][y]=false;
+    if(a[x][y]=='0'){
+        for(int i=0;i<8;i++){
+            for(int j=0;j<8;j++){
+                int idx = x + dx[i];
+                int idy = y + dy[i];
+                if(masked[idx][idy]){
+                    unmasked(idx,idy);
+                }
+            }
+        }
+    }
+    return ;
+}
+
+/**
  * @brief   Main function
  * @return  signed 
  */
 signed main(){
     cin >> m >> n >> k;         //Input.
     init(m,n,k);
-    // printAll(m,n);
+    printAll(m,n);
+    cout << endl;
     printCurrent(m,n);
-    int move = m*n-k;
-    while(move>0){
-        move--;
+    while(!clear(m,n)){
         int x,y;
+        /* UI: If user want to give input from 1->n, 1->m
+        x--;
+        y--;
+        */
         cin >> x >> y;
         if(!valid(x,y,m,n)){
-            cout << "Invalid." << endl;
-            move++;
+            cout << "Invalid.";
         }
         if(checkMine(x,y)){
             cout << "YOU'RE DEAD!";
@@ -140,13 +190,10 @@ signed main(){
             printAll(m,n);
             return 0;
         }
-        masked[x][y]=false;
+        unmasked(x,y);
         printCurrent(m,n);
         cout << endl;
     }
-    if(move==0){
-        cout << "Congratulations! You've clear the mine field." << endl;
-        printAll(m,n);
-    }
+    cout << "Congratulations! You've clear the mine field." << endl;
     return 0;
 }
