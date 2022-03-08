@@ -182,7 +182,7 @@ signed main(){
         */
         cin >> x >> y;
         if(!valid(x,y,m,n)){
-            cout << "Invalid.";
+            cout << "Invalid." << endl;
         }
         if(checkMine(x,y)){
             cout << "YOU'RE DEAD!";
