@@ -38,4 +38,5 @@ signed main(){
     int a[100];
     memset(a, 0, sizeof(a));
     n_queen(a, n, 0);
+    return 0;
 }

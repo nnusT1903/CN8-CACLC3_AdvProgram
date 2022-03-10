@@ -5,56 +5,48 @@ using namespace std;
 
 //global variables:
 int n,k;
+char c[26];
 
-void permute(string a, int l, int r){
-    if (l == r) {
-        for(int i = 0; i < a.size(); i++){
-            cout << a[i] << " ";
+void init(int n) {
+    memset(c,'.',sizeof(c));
+    iota(c,c+n,(char)97);
+    // for(int i = 0; i < 26; i++ ){
+    //     cout << c[i];
+    // }
+    return;
+}
+void shuffle(char c[],int k){
+    do {
+        for(int i=0;i<k;i++){
+            cout << c[i] << " ";
         }
         cout << endl;
-    }
-    else{
-        for (int i = l; i <= r; i++){
-            swap(a[l], a[i]);
-            permute(a, l+1, r);
-            swap(a[l], a[i]);
-        }
-    }
+    } while ( next_permutation(c,c+k) );
+    return;
 }
 
-void solve(char arr[], char data[], int start, int end, int index, int r){
-    if (index == r){
-        string temp = "";
-        for (int j = 0; j < r; j++){
-            // cout << data[j] << " ";
-            temp+=data[j];
-        }
-        permute(temp,0,temp.size()-1);
-        // cout << endl;
+void permute(int n, int k, int index, char temp[], int i){
+    if(index == k){
+        shuffle(temp,k);
         return;
     }
-    for (int i = start; i <= end && end - i + 1 >= r - index; i++){
-        data[index] = arr[i];
-        solve(arr, data, i+1, end, index+1, r);
-    }
+    if(i>n-1) return;
+    temp[index] = c[i];
+    permute(n,k,index+1,temp, i+1);
+    permute(n,k,index, temp, i+1);
 }
 
-void print(char arr[], int n, int r){
-    char data[maxn*10];
-    solve(arr, data, 0, n-1, 0, r);
+void solve(int n,int k){
+    char temp[31];
+    permute(n, k, 0, temp, 0);
 }
+
 
 signed main(){
+    freopen("F:/W_Envi/Programming/C++/Main_Code/input.INP","r",stdin);
+	freopen("F:/W_Envi/Programming/C++/Main_Code/output.OUT","w",stdout);
     cin >> n >> k;
-    vector<char> vc;
-    for(int i=0;i<n;i++){
-        vc.push_back(tolower((char)(i+65)));
-    }
-
-    char arr[maxn*10];
-    for(int i=0;i<vc.size();i++){
-        arr[i] = vc[i];
-    }
-    print(arr,n,k);
+    init(n);
+    solve(n,k);
     return 0;
 }
