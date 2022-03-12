@@ -4,42 +4,37 @@ using namespace std;
 #define int long long
 #define maxn 100005
 //global variables
-int Int[maxn*8];
-vector<int> v;
-vector<vector<int>> res;
 
-void generate(int n){
+void generate(int n,int Int[]){
     iota(Int,Int+n,1);
     // for(int i=0;i<n;i++) cout << Int[i] << " ";
     return;
 }
 
-void permute(int sum, int n){
+void permute(int sum, int n, int id, int v[], int Int[]){
     if(sum==0){
-        res.push_back(v);
+        for(int i=0;i<id;i++){
+            cout << v[i] << " ";
+        }
+        cout << endl;
         return;
     }
     if(sum<0 || n<=0){
         return;
     }
-    v.push_back(Int[n-1]);
-    permute(sum-Int[n-1],n);
+    v[id] = Int[n-1];
+    permute(sum-Int[n-1],n,id+1,v,Int);
     //decrease first value, continue to second largest value
-    v.pop_back();
-    permute(sum,n-1);
+    permute(sum,n-1,id,v,Int);
     return;
 }
 
-signed main(){
+signed main(){ 
+    int Int[maxn];
+    int v[maxn];
     int n;
     cin >> n;
-    generate(n);
-    permute(n,n);
-    for(int i=0;i<res.size();i++){
-        for(auto j:res[i]){
-            cout << j << " ";
-        }
-        cout << endl;
-    }
+    generate(n,Int);
+    permute(n,n,0,v,Int);
     return 0;
 }

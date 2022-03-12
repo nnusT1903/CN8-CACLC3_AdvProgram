@@ -2,15 +2,11 @@
 using namespace std;
 
 #define int long long
-#define maxn 100005
+#define maxn 80008
 
-//global variables
-int n;
-int p[maxn];
-int pin[maxn];
-int dir[maxn];
+//global variable
 
-void init(int n){
+void init(int n,int p[],int pin[], int dir[]){
     for (int i = 1; i <= n; i++) {
         dir[i] = -1;
         p[i]  = i;
@@ -19,7 +15,7 @@ void init(int n){
     return;
 }
 
-void move(int x, int y){
+void move(int x, int y, int p[], int pin[]){
     int z = p[pin[x]+y];
     p[pin[x]] = z;
     p[pin[x]+y] = x;
@@ -28,23 +24,18 @@ void move(int x, int y){
     return;
 }
 
-void print(){
-    for(int i=1;i<=n;i++){
-        cout << p[i];
-    }
-    return;
-}
-
-void permute(int x){
+void permute(int x, int n, int p[], int pin[], int dir[]){
     if(x>n){
-        print();
+        for(int i=1;i<=n;i++){
+            cout << p[i];
+        }
         cout << endl;
     }
     else{
-        permute(x+1);
+        permute(x+1,n,p,pin,dir);
         for(int i=1;i<x;i++){
-            move(x,dir[x]);
-            permute(x+1);
+            move(x,dir[x],p,pin);
+            permute(x+1,n,p,pin,dir);
         }
         dir[x]*=-1;
     }
@@ -53,8 +44,12 @@ void permute(int x){
 
 
 signed main(){
+    int n;
+    int p[maxn];
+    int pin[maxn];
+    int dir[maxn];
     cin >> n;
-    init(n);
-    permute(1);
+    init(n,p,pin,dir);
+    permute(1,n,p,pin,dir);
     return 0;
 }
